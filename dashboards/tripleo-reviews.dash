@@ -1,0 +1,25 @@
+[dashboard]
+title = TripleO Reviews
+description = Review Inbox
+foreach = (project:openstack/tripleo-incubator OR project:openstack/tripleo-image-elements OR project:openstack/tripleo-heat-templates OR project:openstack/tripleo-specs OR project:openstack/os-apply-config OR project:openstack/os-collect-config OR project:openstack/os-refresh-config OR project:openstack/diskimage-builder) NOT owner:self NOT label:Workflow<=-1 label:Verified>=1,jenkins NOT label:Code-Review>=-2,self branch:master status:open
+
+[section "Your are a reviewer, but haven't voted in the current revision"]
+query = reviewer:self
+
+[section "Passed Jenkins, No Negative Feedback"]
+query = NOT label:Code-Review<=-1 limit:100
+
+[section "Changes with no code review in the last 48hrs"]
+query = NOT label:Code-Review<=2 age:48h
+
+[section "Changes with no code review in the last 5 days"]
+query = NOT label:Code-Review<=2 age:5d
+
+[section "Changes with no code review in the last 7 days"]
+query = NOT label:Code-Review<=2 age:7d
+
+[section "Some adjustment required (-1 only)"]
+query = label:Code-Review=-1 NOT label:Code-Review=-2 limit:100
+
+[section "Dead Specs (-2)"]
+query = label:Code-Review<=-2
