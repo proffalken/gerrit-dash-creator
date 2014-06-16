@@ -92,6 +92,20 @@ def index():
             urls.append({"title":title,"url": gen_url(title, foreach, sections)})
     return template("index.tpl",urls=urls)
 
+@route("/json/")
+def index():
+    urls = []
+    for subdir, dirs, files in os.walk("dashboards"):
+        for file in files:
+            filename = subdir+"/"+file
+            title, foreach = get_title(filename)
+            sections = get_sections(filename)
+            urls.append({"title":title,"url": gen_url(title, foreach, sections)})
+    from bottle import response
+    from json import dumps
+    response.content_type = 'application/json'
+    return dumps(urls)
+
 def main():
     opts = get_options()
     if opts.webserver == True:
